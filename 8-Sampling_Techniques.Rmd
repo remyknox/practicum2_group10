@@ -1,0 +1,573 @@
+---
+title: "Session 8: Sampling Techniques"
+subsubtitle: "ESM 228: Monitoring & Evaluation"
+author: "Mark Buntaine"
+output: beamer_presentation
+header-includes:
+- \usepackage{caption}
+- \captionsetup[figure]{labelformat=empty}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Outline & Goals
+
+1. Quick review of sampling bias
+2. Stratified sampling & re-weighting
+3. Clustered sampling
+
+```{r load, echo=FALSE}
+# Load the required packages
+library(DeclareDesign)
+library(knitr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(dplyr)
+library(kableExtra)
+```
+
+## Sampling distribution
+
+- **Sampling distribution**: the distribution of sample values with a repeated draw of a given sampling frame.
+
+- *Standard deviation* of a sample describes the variance in the data ($\sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \bar{y})^2}$)
+- *Standard error* of a sample describes the sampling variance of a parameter over repeated draws
+
+## Sampling bias
+
+In practice, it is often  difficult to take a random sample from our target population, which leads to sampling bias.
+
+- **Sampling bias** is the difference between the true value of the population parameter we are trying to discover and the *expected value* of that parameter based on the sampling procedure.
+    + Sampling bias is **not** the difference between the true value of the population parameter and the realized value in a sample.
+    + Sampling procedures that deviate from a random sample cause sampling bias.
+  
+- There are two main sources of sampling bias:
+    + Population / sample mismatches
+    + Reporting bias
+
+
+## Main Road Bias Example
+
+![Main road bias](figures/main_road.png)
+
+## Declaring a population: an example
+
+```{r declare-main_road}
+set.seed(228)
+population <- declare_population(
+  households = add_level(N=500, 
+     main=sample(c(rep(0,250),rep(1,250))),
+     satisfied=correlate(given = main, rho = 0.5,
+                         draw_binary, prob = 0.5)
+))
+pop <- population()
+
+kable(table(pop$main,pop$satisfied)) %>% 
+  add_header_above(c("main"=1,"satisfied"=2))
+```
+
+## Response bias
+
+**Response bias** is the difference between the true parameter of interest and the expected sample value of the parameter based on unequal probabilities of reporting.
+
+Let's continue with last session's example:
+
+- For main street residents, the chance of being home is 50%
+- For main street residents, the chance of being home is 20%
+
+## Declaring response bias
+
+```{r diff-reporting, echo=FALSE}
+
+reporting <- declare_assignment(blocks=main,
+                  assignment_variable = "R",
+                  block_prob=c(0.2,0.5)) 
+pop <- reporting(pop)
+```
+
+```{r resp-tab, echo=FALSE}
+table(pop$main,pop$R)
+```
+
+## Examining sample characteristics
+
+```{r samp-character, echo=FALSE}
+
+sims <- 1000 #simulations
+sam.n <- 250 #attempted sample size
+
+store <- rep(NA, sims)
+for (i in 1:sims){
+  store[i] <- mean(pop[sample(1:500,sam.n),] %>%
+                     filter(R==1) %>%
+                     pull(satisfied))
+}
+
+# summary(store)
+```
+
+```{r resp-viz, echo=FALSE}
+sam.dist <- ggplot(data.frame(store), aes(x=store)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of sample") +
+  geom_vline(xintercept = mean(pop$satisfied), linetype="dashed", 
+                color = "blue", size=1.5)
+sam.dist
+```
+
+## Sample Weights
+
+**Bias** in the above example comes from the over-inclusion of main street residents as compared to side street residents. Let's divide them into two groups:
+
+![Resident Type Strata](figures/8_main_side_strata.png)
+
+## Strata Weights
+
+**Stratification**: the division of an observed sample or sample frame into non-overlapping groups.
+
+One way to recover the population parameter value would be to compute the weighted average of the strata values:
+
+$$ \bar{Y} = \sum^{j} \bar{y_j} w_j$$
+Where $\bar{y}$ is the target population parameter, $\bar{y_j}$ is the sample average in strata $j$, and $w_j$ is the proportion of the population in strata $j$.
+
+- In Salkind, the equivalent formula is used: $\bar{Y} = \frac{1}{N} \sum_{j=1}^{j} N_j\bar{y_j}$
+
+## Strata Weights, Analytical Solution
+
+Using this formula:
+
+$$ \bar{Y} = \sum^{j} \bar{y_j} w_j$$
+```{r main-prop-tab}
+prop.table(table(pop$main,pop$satisfied),1)
+```
+
+We plug in the relevant values:
+
+$$ \bar{Y} = 0.316 * 0.5 + 0.652 * 0.5 = 0.484$$
+
+## Strata Weights, Analytical Solution
+
+$$ \bar{Y} = 0.316 * 0.5 + 0.652 * 0.5 = 0.484$$
+
+```{r calc-pop}
+mean(pop$satisfied)
+```
+
+## Strata Weights, Sampling Distribution Code
+
+```{r strata-sam-dist, cache=TRUE}
+sims <- 1000 #simulations
+sam.n <- 250 #attempted sample size
+store <- rep(NA, sims)
+
+for (i in 1:sims){
+  index <- sample(1:500,sam.n) #drawn sample
+  pop <- reporting(pop)
+  main <- mean(pop[index,] %>%
+               filter(R==1 & main==1) %>%
+               pull(satisfied))
+  side <- mean(pop[index,] %>%
+               filter(R==1 & main==0) %>%
+               pull(satisfied))
+  store[i] <- main * 0.5 + side * 0.5
+  
+}
+```
+
+```{r se-store, echo=FALSE}
+prop.se.store <- sd(store)
+```
+
+## Strata Weights, Sampling Distribution
+
+```{r strata-weight-viz, echo=FALSE}
+strata.dist <- ggplot(data.frame(store), aes(x=store)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of sample") +
+  geom_vline(xintercept = mean(pop$satisfied), linetype="dashed", 
+                color = "blue", size=1.5)
+strata.dist
+```
+
+## Strata Weights, Assumptions
+
+1. Different responses rates are entirely captured by the strata
+    + i.e., missingness is at random within strata
+    
+2. The distribution of the population into strata is known
+
+
+**Note:** we have not assumed any advanced knowledge about response rates within strata and have still recovered the population parameter
+
+
+## Within-strata descriptive inference
+
+In many situations, we are interested in strata parameters:
+
+```{r strata-sub-1, echo=FALSE, cache=TRUE}
+sims <- 1000 #simulations
+sam.n <- 250 #attempted sample size
+store <- rep(NA, sims)
+main <- rep(NA, sims)
+side <- rep(NA, sims)
+
+for (i in 1:sims){
+  index <- sample(1:500,sam.n) #drawn sample
+  pop <- reporting(pop)
+  main[i] <- mean(pop[index,] %>%
+               filter(R==1 & main==1) %>%
+               pull(satisfied))
+  side[i] <- mean(pop[index,] %>%
+               filter(R==1 & main==0) %>%
+               pull(satisfied))
+  store[i] <- main[i] * 0.5 + side[i] * 0.5
+}
+
+main.hist <- ggplot(data.frame(main), aes(x=main)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of strata sample") +
+  geom_vline(xintercept = mean(pop$satisfied[pop$main==1]), linetype="dashed", 
+                color = "blue", size=1.5) +
+  ggtitle("Main Street, Proportionate") + xlim(c(0,1))
+
+side.hist <- ggplot(data.frame(side), aes(x=side)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of strata sample") +
+  geom_vline(xintercept = mean(pop$satisfied[pop$main==0]), linetype="dashed", 
+                color = "blue", size=1.5) +
+  ggtitle("Side Street, Proportionate") + xlim(c(0,1))
+
+grid.arrange(main.hist,side.hist,ncol=2)
+```
+
+## Difference between strata
+
+```{r diff-strata, echo=FALSE}
+diff <- main-side
+
+diff.hist <- ggplot(data.frame(diff), aes(x=diff)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Difference (Main - Side)") +
+  geom_vline(xintercept = mean(pop$satisfied[pop$main==1]) - mean(pop$satisfied[pop$main==0]), 
+             linetype="dashed", 
+                color = "blue", size=1.5) +
+  ggtitle("Main - Side, Proportionate") + xlim(c(-0.1,0.8))
+
+diff.hist
+
+diff.se <- sd(diff)
+```
+
+## Disproportionate Stratification
+
+We are not required to sample all strata at equal intensity.
+
+    + Main: n=75
+    + Side: n=175
+    
+```{r dis-sample}
+
+  main.index <- which(pop$main==1)
+  side.index <- which(pop$main==0)
+  
+  sam <- c(sample(main.index,75),
+           sample(side.index,175))
+
+```
+
+## Disproportionate Stratification
+
+```{r resam-disp, cache=TRUE}
+sims <- 1000 #simulations
+store <- rep(NA, sims)
+
+for (i in 1:sims){
+  sam <- c(sample(main.index,75),
+           sample(side.index,175)) #drawn sample
+  pop <- reporting(pop)
+  main <- mean(pop[sam,] %>%
+               filter(R==1 & main==1) %>%
+               pull(satisfied))
+  side <- mean(pop[sam,] %>%
+               filter(R==1 & main==0) %>%
+               pull(satisfied))
+  store[i] <- main * 0.5 + side * 0.5
+  
+}
+```
+
+```{r se-store2, echo=FALSE}
+dis.se.store <- sd(store)
+```
+
+## Disproportionate Stratification
+
+```{r strata-weight-viz2, echo=FALSE}
+strata.dist2 <- ggplot(data.frame(store), aes(x=store)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of sample") +
+  geom_vline(xintercept = mean(pop$satisfied), linetype="dashed", 
+                color = "blue", size=1.5) + xlim(c(0.15,0.75)) +
+  ggtitle("Disproportionate Stratification") +
+  annotate("text",-Inf,Inf,label=paste("se=",round(dis.se.store,4),sep=""), hjust = 0, vjust = 1, size=6)
+strata.dist2
+```
+
+## Disproportionate Stratification, Sampling Variation
+
+We do not add much sampling variance!
+
+```{r strata-weight-compare, echo=FALSE}
+strata.dist.x <- strata.dist + xlim(c(0.15,0.75)) +
+  ggtitle("Proportionate Stratification") +
+  annotate("text",-Inf,Inf,label=paste("se=",round(prop.se.store,4),sep=""), hjust = 0, vjust = 1, size=6)
+grid.arrange(strata.dist.x,strata.dist2,ncol=1)
+```
+
+## Within-strata sampling variance, disproportionate sampling
+
+```{r strata-sub-2, echo=FALSE, cache=TRUE}
+sims <- 1000 #simulations
+
+store <- rep(NA, sims)
+main <- rep(NA, sims)
+side <- rep(NA, sims)
+
+for (i in 1:sims){
+  sam <- c(sample(main.index,75),
+           sample(side.index,175)) #drawn sample #drawn sample
+  pop <- reporting(pop)
+  main[i] <- mean(pop[sam,] %>%
+               filter(R==1 & main==1) %>%
+               pull(satisfied))
+  side[i] <- mean(pop[sam,] %>%
+               filter(R==1 & main==0) %>%
+               pull(satisfied))
+  store[i] <- main[i] * 0.5 + side[i] * 0.5
+}
+
+main.hist2 <- ggplot(data.frame(main), aes(x=main)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of strata sample") +
+  geom_vline(xintercept = mean(pop$satisfied[pop$main==1]), linetype="dashed", 
+                color = "blue", size=1.5) +
+  ggtitle("Main Street, Disproportionate") + xlim(c(0,1))
+
+side.hist2 <- ggplot(data.frame(side), aes(x=side)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of strata sample") +
+  geom_vline(xintercept = mean(pop$satisfied[pop$main==0]), linetype="dashed", 
+                color = "blue", size=1.5) +
+  ggtitle("Side Street, Disproportionate") + xlim(c(0,1))
+
+grid.arrange(main.hist2,side.hist2,ncol=2)
+```
+
+## Proportionate vs. disproportionate stratified sampling
+
+```{r sam-type-compare, echo=FALSE}
+grid.arrange(main.hist,side.hist,main.hist2,side.hist2,ncol=2)
+```
+
+## Sampling distribution of difference between strata
+
+```{r diff-strata2, echo=FALSE}
+diff <- main-side
+diff2.se <- sd(diff)
+
+diff.hist2 <- ggplot(data.frame(diff), aes(x=diff)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Difference (Main - Side)") +
+  geom_vline(xintercept = mean(pop$satisfied[pop$main==1]) - mean(pop$satisfied[pop$main==0]), 
+             linetype="dashed", 
+                color = "blue", size=1.5) +
+  ggtitle("Main - Side, Disproportionate") + xlim(c(-0.1,0.8)) +
+  annotate("text",-Inf,Inf,label=paste("se=",round(diff2.se,4),sep=""), hjust = 0, vjust = 1, size=6)
+
+diff.hist <- diff.hist +
+  annotate("text",-Inf,Inf,label=paste("se=",round(diff.se,4),sep=""), hjust = 0, vjust = 1, size=6)
+
+grid.arrange(diff.hist,diff.hist2,ncol=2)
+```
+
+## Conceptual practice: stratification
+
+- Describe a monitoring situation where you might want to use stratified sampling
+    + What are the strata?
+    + How would you allocate sampling effort across the strata?
+
+## DeclareDesign()
+
+```{r declare-pop}
+set.seed(228)
+population <- declare_population(
+  households = add_level(N=500, 
+     main=draw_binary(N=N, prob = 0.5),
+     satisfied=correlate(given = main, rho = 0.5,
+                         draw_binary, prob = 0.5)
+))
+
+my_estimand <- declare_estimands(mean(satisfied),
+                                 label = "Ybar")
+```
+
+## DeclareDesign()
+
+```{r declare-report}
+reporting <- declare_assignment(blocks=main,
+                  assignment_variable = "R",
+                  block_prob=c(0.2,0.5))
+
+sampling <- declare_sampling(strata=main,
+                             strata_n=c(175,75))
+
+```
+
+## DeclareDesign()
+
+```{r declare-estimator}
+
+strata_weighted_mean <- function(data){
+  data.frame(  
+  estimator_label = "strata_w_mean",
+  estimand_label = "Ybar",
+  n = nrow(data),
+  stringsAsFactors = FALSE,
+  
+  estimate = data %>% filter(R==1) %>%
+    group_by(main) %>% 
+    summarise(mean=mean(satisfied)) %>%
+    mutate(prop=c(0.5,0.5)) %>%
+    mutate(sub.mean=mean*prop) %>% pull(sub.mean) %>% 
+    sum())
+} #just use this function, custom
+
+```
+
+## DeclareDesign()
+
+```{r diagnosis, cache=TRUE}
+
+answer <- declare_estimator(
+  handler = tidy_estimator(strata_weighted_mean),
+  estimand = my_estimand)
+
+design <- population + my_estimand + reporting +
+          sampling + answer
+diagnosis <- diagnose_design(design, sims = 1000)
+
+diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
+  kable()
+
+```
+
+## Clustered sampling
+
+- Sometimes it might be logistically difficult to sample at the level of *units* and we instead want to sample at the level of *clusters*. Examples:
+
+    + students vs. classrooms
+    + households vs. neighborhoods
+    + volunteers vs. volunteer teams
+    + employees vs. branches
+    
+- We can still recover a population parameter by randomly sampling clusters
+
+    + (assuming responses are missing at random within clusters)
+    
+- However, we pay a cost in terms of sampling variance when units within clusters are similar
+
+    + i.e., we draw a large number of similar units into the final sample
+    
+    
+## Example: How well do agents serve the rural poor in India?
+
+```{r declare-pop-india}
+population <- declare_population(
+  district = add_level(N=3,
+    u = runif(N, min=0.3, max=0.7)),
+  office = add_level(N=30,
+    v = runif(length(office), min=-0.1, max=0.1)), 
+  agent = add_level(N=5,
+    w=runif(length(agent), min=-0.3, max=0.3)),  
+  shg = add_level(N=10,
+    x=runif(length(shg), min=-0.1, max=0.1)),
+  individual = add_level(N=20,
+    y=runif(length(individual), min=-0.3, max=0.3),
+    prob=case_when(u+v+w+x+y<0 ~ 0,
+                   u+v+w+x+y>1 ~ 1,
+           u+v+w+x+y>=0 & u+v+w+x+y<=1 ~ u+v+w+x+y),
+     satisfied=draw_binary(prob = prob))
+  )
+```
+
+
+## Comparing sampling distributions
+
+Let's compare what happens when we sample 5000 people in three ways:
+
+- Sample 5 offices
+- Sample 25 agents
+- Sample 5000 individuals
+
+```{r pop-declll}
+pop <- population()
+```
+
+## Three clustered sampling designs
+
+```{r office-sampling, cache=TRUE}
+sims <- 1000 #simulations
+
+store.o <- rep(NA, sims)
+for (i in 1:sims){
+  sam <- sample(unique(pop$office),5)
+  store.o[i] <- mean(pop[pop$office %in% sam,"satisfied"])
+}
+
+store.a <- rep(NA, sims)
+for (i in 1:sims){
+  sam <- sample(unique(pop$agent),25)
+  store.a[i] <- mean(pop[pop$agent %in% sam,"satisfied"])
+}
+
+store.i <- rep(NA, sims)
+for (i in 1:sims){
+  sam <- sample(unique(pop$individual),5000)
+  store.i[i] <- mean(pop[pop$individual %in% sam,"satisfied"])
+}
+```
+
+## Comparing sampling distributions
+
+```{r compare-fig-office, echo=FALSE}
+
+hist.o <- ggplot(data.frame(store.o), aes(x=store.o)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of sample") +
+  geom_vline(xintercept = mean(pop$satisfied), linetype="dashed", 
+                color = "blue", size=1.5) + ggtitle("Office Clustering") + xlim(c(0.4,0.8))
+
+hist.a <- ggplot(data.frame(store.a), aes(x=store.a)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of sample") +
+  geom_vline(xintercept = mean(pop$satisfied), linetype="dashed", 
+                color = "blue", size=1.5) + ggtitle("Agent Clustering") + xlim(c(0.4,0.8))
+
+hist.i <- ggplot(data.frame(store.i), aes(x=store.i)) + 
+  geom_histogram(color="black", fill="white") +
+  xlab("Mean value of sample") +
+  geom_vline(xintercept = mean(pop$satisfied), linetype="dashed", 
+                color = "blue", size=1.5) + ggtitle("No Clustering") + xlim(c(0.4,0.8))
+
+grid.arrange(hist.o,hist.a,hist.i,ncol=1)
+
+```
+
+## Conceptual practice: clusters
+
+- Describe a monitoring situation where you might want to use clustered sampling
+    + What are the clusters?
+    + How would you choose the level of clustering?

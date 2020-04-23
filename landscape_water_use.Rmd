@@ -1,0 +1,50 @@
+---
+title: "Theory of Change for Landscape Water Use"
+author: "Jeremy Knox"
+date: "4/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Practicum 2: Measurement Strategy
+Sketch out a measurement strategy to be paired with a theory of change. You may use the theory of change you wrote up for the previous practicum or you may choose any other documented theory of change from an organization of your choice. Your measurement strategy should focus on the results that are most important in the theory of change and/or the outputs, outcomes, and assumptions that are most uncertain.
+
+## Measure Definition
+For purposes of planning, you can assume that your budget for measurement is ~5% of the program cost that you choose. You will want to make sure that your measurement strategy satisfies the goals that we have discussed in the course and that are covered in the relevant readings:
+    a. Valid
+    b. Proximate
+    c. Precise d. Sensitive
+    e. Economical f. Practical
+    g. Reliable
+    h. Interpretable
+    i. Useful
+    j. Generalizable (if goal is to compare outcomes across programs)
+    
+You should sketch out the eight most important measures given the theory of change and results framework. Each of these measures should have the following information (see Session 5, USAID 2019 for examples):
+    1. Measurement goal
+    2. Exact measure to be taken (definition, survey item wording, etc.) 3. Unit of measurement
+    4. Source of data
+    5. Rationale for choice of measure
+    6. Responsibility for data collection (who?)
+    7. Frequency of data collection
+    
+    
+## Sampling Strategy
+For three of your eight measures, formally declare your sampling strategy in code. The declaration should include:
+    1. Description of the target population (in words)
+    2. Declaration of hypothetical population (in code)
+    3. Description of any challenges to drawing a representative sample (in words) 
+    4. Declaration of reporting probabilities (in code)
+    5. Description of sampling procedure (in words)
+    6. Declaration of sampling procedure (in code)
+
+    
+```{r}
+
+
+
+```
+
