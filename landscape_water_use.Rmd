@@ -16,8 +16,10 @@ Sketch out a measurement strategy to be paired with a theory of change. You may 
 For purposes of planning, you can assume that your budget for measurement is ~5% of the program cost that you choose. You will want to make sure that your measurement strategy satisfies the goals that we have discussed in the course and that are covered in the relevant readings:
     a. Valid
     b. Proximate
-    c. Precise d. Sensitive
-    e. Economical f. Practical
+    c. Precise 
+    d. Sensitive
+    e. Economical 
+    f. Practical
     g. Reliable
     h. Interpretable
     i. Useful
@@ -25,12 +27,22 @@ For purposes of planning, you can assume that your budget for measurement is ~5%
     
 You should sketch out the eight most important measures given the theory of change and results framework. Each of these measures should have the following information (see Session 5, USAID 2019 for examples):
     1. Measurement goal
-    2. Exact measure to be taken (definition, survey item wording, etc.) 3. Unit of measurement
+    2. Exact measure to be taken (definition, survey item wording, etc.) 
+    3. Unit of measurement
     4. Source of data
     5. Rationale for choice of measure
     6. Responsibility for data collection (who?)
     7. Frequency of data collection
-    
+
+
+1) How many rain shut-off sensors have been installed?
+2) What houses are saving the most water with the water% adjust sensor?
+3) How many water% adjust sensor have been installed 
+4) How much water is being saved by the water% adjust sensors? 
+5) What houses are saving the most water with the water% adjust sensor? (some houses have much bigger yards so a water% adjust might conserve a lot more water)?
+6) How many houses have taken advantage of up to $1,000 in rebate? 
+7) What equipment is being purchased with $1,00 rebate? 
+
     
 ## Sampling Strategy
 For three of your eight measures, formally declare your sampling strategy in code. The declaration should include:
