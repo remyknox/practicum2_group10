@@ -35,13 +35,15 @@ You should sketch out the eight most important measures given the theory of chan
     7. Frequency of data collection
 
 
-1) How many rain shut-off sensors have been installed?
-2) What houses are saving the most water with the water% adjust sensor?
-3) How many water% adjust sensor have been installed 
-4) How much water is being saved by the water% adjust sensors? 
-5) What houses are saving the most water with the water% adjust sensor? (some houses have much bigger yards so a water% adjust might conserve a lot more water)?
-6) How many houses have taken advantage of up to $1,000 in rebate? 
-7) What equipment is being purchased with $1,00 rebate? 
+1) “Have you had a rain shut-off sensor installed at your home?” Yes/No/Don’t Know
+2) “Have you had a water% adjust sensor installed at your home?” Yes/No/Don’t Know
+3) “How much water did your home use in X month vs X month?” (Something like that?” Or water bill?
+4) Are you aware of the up to $1,000 rebate for water efficient equipment? 
+5) How familiar are you with the Smart Landscape Rebate program? Never heard of it, Not very familiar, somewhat familiar, very familiar?
+6) Are you aware of the rebates for water saving landscape sensors? 
+7) Do you think your landscape water usage is below average/average/above average/don’t know?
+8) Have you added, or plan to add, any of the following to your landscaping in the past X period of time? Native plants (list some examples), Water-wise plants (list some examples), Mulch, Permeable surfaces (artificial grass, gravel, flagstone)
+
 
     
 ## Sampling Strategy
