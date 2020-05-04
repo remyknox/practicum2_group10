@@ -28,14 +28,14 @@ This measurement strategy concerns the Water Wise Landscaping program in the Cit
 ## Question 1  
 **Measurement goal** Assess effectiveness of classroom presentation for getting students excited to plant native plants at home  
   
-**Exact Measure to be taken**: How likely are you to plant native plants in your yard at home:
+**Exact Measure to be taken**: How likely are you to plant native plants in your yard at home?
 a) Very likely  
-b) somewhat likely  
-c) somewhat likely  
-d) very likely  
-e) I do not have a yard at home.  
+b) Somewhat likely  
+c) Somewhat likely  
+d) Very likely  
+e) I do not have a yard at home  
   
-**Unit of measure** Individual students who have recieved programing  
+**Unit of measure** Survey responses from individual students who have received programming 
   
 **Source of data** Survey handout 
   
@@ -43,7 +43,7 @@ e) I do not have a yard at home.
   
 **Responsibility for data collection** Survey will be left with teachers by presenters, with a stamp and envelope to return the results.  
   
-**Frequency of data collection** This will be asked twice, once one day after the presentation, and again one month later. Which is when the next question will also be asked.  
+**Frequency of data collection** This will be asked twice, once one day after the presentation, and again one month later, which is when the next question (question 2) will also be asked.  
   
   
 ***  
@@ -58,13 +58,13 @@ b) No
 c) I did not receive the presentation   
 d) I do not have a yard at home  
   
-**Unit of measure** Individual students who have received programing  
+**Unit of measure** Survey responses from individual students who have received programming  
   
 **Source of data** Survey handout 
   
-**Rationale for choice of measure** This question combined with the previous question (with paired anonymous survey ID's) will test whether/to what degree students can influence their family to plant native plants at home. The paired structure will allow for matched data to see whether students who were excited one month ago have acted on that excitement and were able to get their family to plant natives.
+**Rationale for choice of measure** This question combined with question 1 (with paired anonymous survey IDs) will test whether/to what degree students can influence their family to plant native plants at home. The paired structure will allow for matched data to see whether students who were excited one month ago have acted on that excitement and were able to get their family to plant natives.
   
-**Responsibility for data collection** Survey will be mailed or dropped of to teachers by presenters at randomly selected classroom after presenting. Inlcuded will be a stamp and envelope to return the results.  
+**Responsibility for data collection** Survey will be mailed or dropped off to teachers by presenters at randomly selected classroom after presenting. Inlcuded will be a stamp and envelope to return the results.  
   
 **Frequency of data collection** Once, one month after classroom presentation
 
@@ -83,11 +83,11 @@ d) Don't know
   
 **Unit of measure** Actual residential water usage (cubic feet)
   
-**source of data** Survey handout, could be supplemented by residential water bills, City of Santa Barbara Water Utility
+**source of data** Survey handout, could be supplemented by residential water bills, City of Santa Barbara Water Utility data
   
 **Rationale for choice of measure** While it is not possible to determine causality from water usage data, it is important to observe whether water usage did decline in any measurable way, especially when combined with other survey questions related to awareness of water-smart landscaping or use of the rebate program
   
-**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes).
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of 500 Santa Barbara households (350 owned homes, 150 rented homes).
   
 **Frequency of data collection** Once, one year after program implementation
 
@@ -112,25 +112,27 @@ b) No/Don't know
   
 **Source of data** Survey handout 
   
-**Rationale for choice of measure** This question, combined with question 4 and other questions related to program familiarity, will help explore whether educational efforts and/or rebates have led SB residents to implement water-saving measures in their yards.
+**Rationale for choice of measure** This question, combined with question 7 and other questions related to program familiarity, will help explore whether educational efforts and/or rebates have led SB residents to implement water-saving measures in their yards.
   
-**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes). 
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of 500 Santa Barbara households (350 owned homes, 150 rented homes). 
   
 **Frequency of data collection** Once, one year after program implementation
 
 ***
 ***
 
-## Question 5 - 
+## Question 5 
 **Measurement goal** Assess how familiar Santa Barbara residents are with Smart Landscape Rebate Program given they use a landscaper/gardener.
   
-**Exact Measure to be taken**: If using a landscaper/gardener, have they approached you about Smart Landscape Rebate programs? 
+**Exact Measure to be taken**: If using a landscaper/gardener, has your lanscaper/gardener approached you about Smart Landscape Rebate programs? 
 
-Answer: Yes/No
+Responses: 
+a) Yes
+b) No
 
 **Unit of measure** Survey responses
   
-**Source of data** Mail 
+**Source of data** Survey handout
   
 **Rationale for choice of measure** This question helps deliver a sense of how successful outreach efforts have been to generate awareness of the program in the community
   
@@ -157,17 +159,17 @@ e) don’t know
   
 **Rationale for choice of measure** We want to know if residents are aware of the benefits of native plants for conserving water. The best way to discover this is to ask.  
 
-**Responsibility for data collection** The survey will be sent out by a third party survey agency who will also collect and summarise the data    
+**Responsibility for data collection** The survey will be sent out by a third party survey agency who will also collect and summarise the data.    
   
 **Frequency of data collection** Surveys will be sent out 1 month after informational flyers were placed at distribution locations (i.e community centers, home improvement stores, garden stores, etc). If this drop off only occurs once, a single curvey will be sufficient, however if it continued, surveys should be conducted every 2 months for the duration of the campaign
 
 #### ***Sampling strategy***  
 
-**Target population**: homeowners and home renters within the city of Santa Barbara   
+**Target population**: Homeowners and home renters within the city of Santa Barbara   
   
-**Challenges to drawing representative sample**: we believe that may be response bias based on 1) knowledge of household knowledge of the benefits of native plants is negatively correlated to the distance that one lives from a central location where information flyers were disseminated, and that 2) people who have seen a flier and learned from it are more likely to respond to our survey question  
+**Challenges to drawing representative sample**: We believe that may be response bias based on 1) knowledge of household knowledge of the benefits of native plants is negatively correlated to the distance that one lives from a central location where information flyers were disseminated, and that 2) people who have seen a flier and learned from it are more likely to respond to our survey question  
 
-**Sampling procedure**: stratified sample giving more effort/surveys to household that are farther away from the central location
+**Sampling procedure**: Stratified sample giving more effort/surveys to household that are farther away from the central location
 
 
 ```{r}
@@ -264,9 +266,9 @@ b) No/Don't know
 
 **Target population**: Homeowners and home renters within the city of Santa Barbara   
   
-**Challenges to drawing representative sample**: We believe that may be response bias based on control of landscaping decisions, as renters may not be in control of landscaping. Homeowners are far more likely to control landscaping decisions and therefore are not only more likely to respond to the survey, but also to have an informed answer.
+**Challenges to drawing representative sample**: We believe that may be response bias based on control of landscaping decisions, as renters may not be in control of landscaping and therefore less likely to respond. Homeowners are far more likely to control landscaping decisions and therefore are not only more likely to respond to the survey, but also more likely to respond affirmatively. This skews our results in terms of evaluating program effectiveness. If we surveyed only renters, for example, we may not really know at all if the program was effective because renters may not have the ability to make decisions about their landscaping.
 
-**Sampling procedure**: Stratified sample favoring sampling of homeowners, despite making up less of the overall population (40%) compared with renters
+**Sampling procedure**: Stratified sample favoring sampling of homeowners, who, despite making up less of the overall population (40%) compared with renters, are more likely to be able to take make water-wise landscaping changes due to control over landscaping decisions.
 
 ```{r}
 
@@ -293,7 +295,7 @@ q7_estimand <- declare_estimands(mean(plan_to_plant),
 
 ```{r declare-report}
 
-# Block probabilities represent how likely it is to get a response, depending on whether the survey recipient is a homeowner or a renter. Given that renters are less likely to be in control of their landscaping, they are less likley to respond to the survey
+# Block probabilities represent how likely it is to get a response, depending on whether the survey recipient is a homeowner or a renter. Given that renters are less likely to be in control of their landscaping, they are less likley to respond to the survey.
 rent_or_own <- declare_assignment(blocks=homeowner,
                   assignment_variable = "P",
                   block_prob=c(0.3,0.7))
@@ -342,17 +344,19 @@ q7_diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
 ***
 
 ## Question 8
-**Measurement goal** Determine whether or not knowledge of the Smart Landscape Rebate program has led to changed decision-mkaing regarding water-smart landscaping
+**Measurement goal** Identifying residents' knowledge of the Smart Landscape Rebate program
 
-**Exact Measure to be taken**: Identifying residents knowledge of the Smart Landscape Rebate program?
+**Exact Measure to be taken** 
 
 Question: Do you know about the Smart Landscape Rebate program?
 
-Answer: Yes/No or 1/0
+Response: 
+a) Yes
+b) No
 
 **Unit of measure** Survey response
   
-**Source of data** Mail 
+**Source of data** Survey handout
   
 **Rationale for choice of measure** This question helps deliver a sense of how successful outreach efforts have been to generate awareness of the program in the community
   
