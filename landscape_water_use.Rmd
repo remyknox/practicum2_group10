@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Practicum 2: Measurement Strategy
+## Practicum 2: Measurement Strategy 
 Sketch out a measurement strategy to be paired with a theory of change. You may use the theory of change you wrote up for the previous practicum or you may choose any other documented theory of change from an organization of your choice. Your measurement strategy should focus on the results that are most important in the theory of change and/or the outputs, outcomes, and assumptions that are most uncertain.
 
 ## Measure Definition
@@ -44,7 +44,6 @@ You should sketch out the eight most important measures given the theory of chan
 7) Do you think your landscape water usage is below average/average/above average/don’t know?
 8) Have you added, or plan to add, any of the following to your landscaping in the past X period of time? Native plants (list some examples), Water-wise plants (list some examples), Mulch, Permeable surfaces (artificial grass, gravel, flagstone)
 
-
     
 ## Sampling Strategy
 For three of your eight measures, formally declare your sampling strategy in code. The declaration should include:
@@ -55,10 +54,11 @@ For three of your eight measures, formally declare your sampling strategy in cod
     5. Description of sampling procedure (in words)
     6. Declaration of sampling procedure (in code)
 
-```{r Jeremy}
+```{r Q1}
 # Question: Do you know about the Smart Landscape Rebate program?
 # Answer: Yes/No or 1/0
-# Sampling Strategy 
+# Sampling Strategy:
+# Survey responses by mail
 # Target population: homeowners and home renters within the city of Santa Barbara 
 # Representitive Sample Challenges: Main road bias by spatial location 
 # Example: Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 250 residents. 
@@ -72,20 +72,24 @@ library(gridExtra)
 library(dplyr)
 library(kableExtra)
 
-# Declaration of hypothetical population and reporting probabilities
+# Declaration of hypothetical population and reporting probabilities with sampling procedure
 set.seed(777)
+
 population <- declare_population(
   main = add_level(N=2, 
                    baseline=c(.2,.1)),
   homeowner = add_level(N=c(40000*.7, 40000*.3), 
                       know=draw_binary(baseline))
 )
+
 pop <- population()
 pop.vector <- c(40000*.7, 40000*.3)
 my_estimand <- declare_estimands(mean(know), label = "Ybar")
+
 reporting <- declare_assignment(blocks=main,
                   assignment_variable = "R",
                   block_prob=c(0.2,0.1)) #anticipate only 10% of Gibraltar residents and 20% of everyone else to respond to survey
+
 sampling <- declare_sampling(strata=main, 
                              strata_n=c(150,350)) # sampling twice as many 
 
@@ -121,7 +125,6 @@ diagnosis$diagnosands_df[,c(4,5,12,14)] %>% kable()
 ```{r}
 
 # Load Packages
-
 library(DeclareDesign)
 library(knitr)
 library(ggplot2)
