@@ -56,16 +56,10 @@ For three of your eight measures, formally declare your sampling strategy in cod
     6. Declaration of sampling procedure (in code)
 
     
-```{r Jeremy}
-# Question: Do you know about the Smart Landscape Rebate program?
-# Answer: Yes/No or 1/0
-# Sampling Strategy 
-# Target population: homeowners and home renters within the city of Santa Barbara 
-# Representitive Sample Challenges: Main road bias by spatial location 
-# Example: Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 250 residents. 
+```{r}
 
+# Load Packages
 
-# Load the required packages
 library(DeclareDesign)
 library(knitr)
 library(ggplot2)
@@ -74,37 +68,90 @@ library(gridExtra)
 library(dplyr)
 library(kableExtra)
 
-# Declaration of hypothetical population and reporting probabilities
-set.seed(777)
-sb_pop <- DeclareDesign::declare_population(
-    households = add_level(N=40000, 
-                           main=sample(c(rep(0,40000*.4),rep(1,40000*.6))), 
-                           satisfied=correlate(given = main, 
-                                               rho = 0.4,
-                                               draw_binary, 
-                                               prob = 0.3)
+```
+
+### Have you added, or plan to add, any of the following to your landscaping in the past X period of time?
+
+Responses:
+- Native plants (list some examples)
+- Water-wise plants (list some examples)
+- Mulch
+- Permeable surfaces (artificial grass, gravel, flagstone)
+- None of the above
+- Don’t know
+
+```{r}
+
+# Set population of SB based on # of households in SB City, according to US Census data (rounded up to 40,000 for simplicity's sake). Probability is based on data from https://bit.ly/2zSrEdT, which reports a 40% homeownership rate.
+# Probability: estimating that 70% of homeowners control their landscaping decisions, while only 30% of renters control their landscaping decisions.
+
+set.seed(228)
+population <- declare_population(
+  households = add_level(N=40000, 
+     homeowner=draw_binary(N=N, prob = 0.4),
+     plan_to_plant=correlate(given = homeowner, rho = 0.5,
+                         draw_binary, prob = 0.5)
 ))
+
 pop <- population()
-reporting <- declare_assignment(blocks=main,
-                  assignment_variable = "R",
-                  block_prob=c(0.2,0.1)) #anticipate only 10% of Gibraltar residents and 20% of everyone else to respond to survey
-pop <- reporting(pop)
 
-# Declaration of sampling procedure
-sims <- 1000 #simulations
-sam.n <- 250 #attempted sample size store <- rep(NA, sims)
+kable(table(pop$homeowner,pop$plan_to_plant)) %>% 
+  add_header_above(c("homeowner"=1,"plan_to_plant"=2))
 
-for (i in 1:sims){
-  index <- sample(1:500,sam.n) #drawn sample 
-  pop <- reporting(pop)
-  main <- mean(pop[index,] %>%
-                 filter(R==1 & main==1) %>%
-                 pull(satisfied)) 
-  side <- mean(pop[index,] %>%
-                 filter(R==1 & main==0) %>%
-                 pull(satisfied)) 
-  store[i] <- main * 0.5 + side * 0.5
+# Generate estimand
+my_estimand <- declare_estimands(mean(plan_to_plant),
+                                 label = "Ybar")
+```
+
+## DeclareDesign()
+
+```{r declare-report}
+
+# Block probabilities represent how likely it is that a survey respondent actually is in control of their landscaping. If they're not in control of their landscaping, they are not likley to even respond to the survey. 
+rent_or_own <- declare_assignment(blocks=homeowner,
+                  assignment_variable = "P",
+                  block_prob=c(0.3,0.7))
+
+# We want to get a good idea of whether our program influenced people to make changes in the garden, so we want to hear more from people who are more likely to have control over their own gardens. We oversample homeowners to bias the average response towards people who are more likely to be in control of their landscaping, and therefore more likely to respond or make water-wise changes in the garden. 
+sampling <- declare_sampling(strata=homeowner,
+                             strata_n=c(150,350))
+```
+
+## DeclareDesign()
+
+```{r declare-estimator}
+
+strata_weighted_mean <- function(data){
+  data.frame(  
+  estimator_label = "strata_w_mean",
+  estimand_label = "Ybar",
+  n = nrow(data),
+  stringsAsFactors = FALSE,
+  
+  estimate = data %>% filter(P==1) %>%
+    group_by(homeowner) %>% 
+    summarise(mean=mean(plan_to_plant)) %>%
+    mutate(prop=c(0.3,0.7)) %>%
+    mutate(sub.mean=mean*prop) %>% pull(sub.mean) %>% 
+    sum())
 }
 
 ```
 
+## DeclareDesign()
+
+```{r diagnosis, cache=TRUE}
+
+answer <- declare_estimator(
+  handler = tidy_estimator(strata_weighted_mean),
+  estimand = my_estimand)
+
+design <- population + my_estimand + rent_or_own +
+          sampling + answer
+
+diagnosis <- diagnose_design(design, sims = 1000)
+
+diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
+  kable()
+
+```
