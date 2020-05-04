@@ -94,29 +94,39 @@ d) Don't know
 ***
 ***
 
-## Question 4  
-**Measurement goal** Assess how familiar Santa Barbara residents are with Smart Landscape Rebate Program
+## Question 4 JEREMY
+**Measurement goal**  
   
-**Exact Measure to be taken**: How familiar are you with the Smart Landscape Rebate program?
+**Exact Measure to be taken**
 
-a) Have never hear of it
-b) Not very familiar but have hear of it
-c) Somewhat familiar
-d) Very familiar
-
-**Unit of measure** Survey responses
+**Unit of measure** 
   
-**Source of data** Survey handout
+**Source of data** 
   
-**Rationale for choice of measure** This question helps deliver a sense of how successful outreach efforts have been to generate awareness of the program in the community
+**Rationale for choice of measure** 
   
-**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes).
+**Responsibility for data collection** 
   
-**Frequency of data collection** Once, one year after program implementation
+**Frequency of data collection** 
 
 ***
 
-## Question 5 - Jeremy
+## Question 5 - 
+**Measurement goal** Assess how familiar Santa Barbara residents are with Smart Landscape Rebate Program given they use a landscaper/gardener.
+  
+**Exact Measure to be taken**: If using a landscaper/gardener, have they approached you about Smart Landscape Rebate programs? 
+
+Answer: Yes/No
+
+**Unit of measure** Survey responses
+  
+**Source of data** Mail 
+  
+**Rationale for choice of measure** This question helps deliver a sense of how successful outreach efforts have been to generate awareness of the program in the community
+  
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households. 
+  
+**Frequency of data collection** Once, one year after program implementation.
 
 ***
 
@@ -333,7 +343,7 @@ Answer: Yes/No or 1/0
   
 **Source of data** Mail 
   
-**Rationale for choice of measure** This question will measure the impact of marketing the Smart Landscape Rebate program to SB residents. 
+**Rationale for choice of measure** This question helps deliver a sense of how successful outreach efforts have been to generate awareness of the program in the community
   
 **Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 Gibraltar residents, 150 "main" residents). 
   
@@ -344,7 +354,7 @@ Answer: Yes/No or 1/0
 
 **Target population**: Main residents and Gibraltar residents within the city of Santa Barbara   
   
-**Challenges to drawing representative sample**: Main road bias by spatial location. Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 250 residents. 
+**Challenges to drawing representative sample**: Main road bias by spatial location. Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 500 residents. 
 
 **Sampling procedure**: Stratified sample favoring sampling of Gibraltar residents, despite making up less of the overall population (30%) compared with renters
 
@@ -374,7 +384,7 @@ q8_reporting <- declare_assignment(blocks=main,
                   assignment_variable = "R",
                   block_prob=c(0.2,0.1)) #anticipate only 10% of Gibraltar residents and 20% of everyone else to respond to survey
 q8_sampling <- declare_sampling(strata=main, 
-                             strata_n=c(150,350)) # sampling twice as many 
+                             strata_n=c(150,350)) 
 
 q8_strata_weighted_mean <- function(data){ 
   data.frame(
