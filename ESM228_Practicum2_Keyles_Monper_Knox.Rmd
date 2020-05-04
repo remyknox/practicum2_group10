@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, include = FALSE}
 # Load Packages
 
 library(DeclareDesign)
@@ -21,6 +21,7 @@ library(dplyr)
 library(kableExtra)
 ```
 
+This measurement strategy concerns the Smart 
   
 ## Question 1  
 **Measurement goal** Assess effectiveness of classroom presentation for getting students excited to plant native plants at home  
@@ -32,9 +33,9 @@ c) somewhat likely
 d) very likely  
 e) I do not have a yard at home.  
   
-**unit of measure** individual students who have recieved programing  
+**Unit of measure** Individual students who have recieved programing  
   
-**source of data** survey handout 
+**Source of data** Survey handout 
   
 **Rationale for choice of measure** This question will measure the impact of the presentation on getting students excited to get their family to plant native plants at home.  
   
@@ -55,9 +56,9 @@ b) No
 c) I did not receive the presentation   
 d) I do not have a yard at home  
   
-**unit of measure** individual students who have received programing  
+**Unit of measure** Individual students who have received programing  
   
-**source of data** survey handout 
+**Source of data** Survey handout 
   
 **Rationale for choice of measure** This question combined with the previous question (with paired anonymous survey ID's) will test whether/to what degree students can influence their family to plant native plants at home. The paired structure will allow for matched data to see whether students who were excited one month ago have acted on that excitement and were able to get their family to plant natives.
   
@@ -78,7 +79,7 @@ b) Decreased
 c) Remained the same
 d) Don't know
   
-**unit of measure** Actual residential water usage (cubic feet)
+**Unit of measure** Actual residential water usage (cubic feet)
   
 **source of data** Survey handout, could be supplemented by residential water bills, City of Santa Barbara Water Utility
   
@@ -101,9 +102,9 @@ b) Not very familiar but have hear of it
 c) Somewhat familiar
 d) Very familiar
 
-**unit of measure** Survey responses
+**Unit of measure** Survey responses
   
-**source of data** Survey handout
+**Source of data** Survey handout
   
 **Rationale for choice of measure** This question helps deliver a sense of how successful outreach efforts have been to generate awareness of the program in the community
   
@@ -127,9 +128,9 @@ c) somewhat ineffective
 d) very ineffective  
 e) don’t know  
   
-**Unit of measurement** survey responses  
+**Unit of measurement** Survey responses  
   
-**Source of data** mail survey  
+**Source of data** Mail survey  
   
 **Rationale for choice of measure** We want to know if residents are aware of the benefits of native plants for conserving water. The best way to discover this is to ask.  
 
@@ -137,13 +138,13 @@ e) don’t know
   
 **Frequency of data collection** Surveys will be sent out 1 month after informational flyers were placed at distribution locations (i.e community centers, home improvement stores, garden stores, etc). If this drop off only occurs once, a single curvey will be sufficient, however if it continued, surveys should be conducted every 2 months for the duration of the campaign
 
-#### *sampling strategy*  
+#### ***Sampling strategy***  
 
-**target population**: homeowners and home renters within the city of Santa Barbara   
+**Target population**: homeowners and home renters within the city of Santa Barbara   
   
-**challenges to drawing representative sample**: we believe that may be response bias based on 1) knowledge of household knowledge of the benefits of native plants is negatively correlated to the distance that one lives from a central location where information flyers were disseminated, and that 2) people who have seen a flier and learned from it are more likely to respond to our survey question  
+**Challenges to drawing representative sample**: we believe that may be response bias based on 1) knowledge of household knowledge of the benefits of native plants is negatively correlated to the distance that one lives from a central location where information flyers were disseminated, and that 2) people who have seen a flier and learned from it are more likely to respond to our survey question  
 
-**sampling procedure**: stratified sample giving more effort/surveys to household that are farther away from the central location
+**Sampling procedure**: stratified sample giving more effort/surveys to household that are farther away from the central location
 
 
 ```{r}
@@ -213,7 +214,7 @@ q6_diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
 ***
 
 ## Question 7  
-**Measurement goal** 
+**Measurement goal** Determine whether or not knowledge of the Smart Landscape Rebate program has led to changed decision-mkaing regarding water-smart landscaping
   
 **Exact Measure to be taken**: Have you added, or plan to add, any of the following to your landscaping in the past X period of time?
 
@@ -226,9 +227,9 @@ Reponses:
 a) Yes, I or someone in my household plans to add at least one of the above to our landscaping at home
 b) No/Don't know
 
-**unit of measure** Survey response
+**Unit of measure** Survey response
   
-**source of data** Survey handout 
+**Source of data** Survey handout 
   
 **Rationale for choice of measure** This question will measure the impact of the presentation on getting students excited to get their family to plant native plants at home.  
   
@@ -236,13 +237,13 @@ b) No/Don't know
   
 **Frequency of data collection** Once, one year after program implementation
 
-#### *sampling strategy*  
+#### ***Sampling strategy***  
 
-**target population**: homeowners and home renters within the city of Santa Barbara   
+**Target population**: Homeowners and home renters within the city of Santa Barbara   
   
-**challenges to drawing representative sample**: We believe that may be response bias based on control of landscaping decisions, as renters may not be in control of landscaping. Homeowners are far more likely to control landscaping decisions and therefore are not only more likely to respond to the survey, but also to have an informed answer.
+**Challenges to drawing representative sample**: We believe that may be response bias based on control of landscaping decisions, as renters may not be in control of landscaping. Homeowners are far more likely to control landscaping decisions and therefore are not only more likely to respond to the survey, but also to have an informed answer.
 
-**sampling procedure**: stratified sample favoring sampling of homeowners, despite making up less of the overall population (40%) compared with renters
+**Sampling procedure**: Stratified sample favoring sampling of homeowners, despite making up less of the overall population (40%) compared with renters
 
 ```{r}
 
@@ -267,8 +268,6 @@ q7_estimand <- declare_estimands(mean(plan_to_plant),
                                  label = "Ybar")
 ```
 
-## DeclareDesign()
-
 ```{r declare-report}
 
 # Block probabilities represent how likely it is that a survey respondent actually is in control of their landscaping. If they're not in control of their landscaping, they are not likley to even respond to the survey. 
@@ -280,8 +279,6 @@ rent_or_own <- declare_assignment(blocks=homeowner,
 q7_sampling <- declare_sampling(strata=homeowner,
                              strata_n=c(150,350))
 ```
-
-## DeclareDesign()
 
 ```{r declare-estimator}
 
@@ -302,8 +299,6 @@ q7_strata_weighted_mean <- function(data){
 
 ```
 
-## DeclareDesign()
-
 ```{r diagnosis, cache=TRUE}
 
 q7_answer <- declare_estimator(
@@ -317,5 +312,95 @@ q7_diagnosis <- diagnose_design(q7_design, sims = 1000)
 
 q7_diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
   kable()
+
+```
+
+***
+***
+
+## Question 8
+**Measurement goal** 
+  
+**Exact Measure to be taken**: 
+
+**Unit of measure** 
+  
+**Source of data**
+  
+**Rationale for choice of measure** 
+  
+**Responsibility for data collection** 
+  
+**Frequency of data collection** 
+
+#### ***Sampling strategy***  
+
+**Target population**: 
+  
+**Challenges to drawing representative sample**: 
+
+**Sampling procedure**: 
+
+
+```{r Jeremy}
+# Question: Do you know about the Smart Landscape Rebate program?
+# Answer: Yes/No or 1/0
+# Sampling Strategy 
+# Target population: homeowners and home renters within the city of Santa Barbara 
+# Representitive Sample Challenges: Main road bias by spatial location 
+# Example: Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 250 residents. 
+
+# Load Packages
+library(DeclareDesign)
+library(knitr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(dplyr)
+library(kableExtra)
+
+# Declaration of hypothetical population and reporting probabilities
+set.seed(777)
+q8_population <- declare_population(
+  main = add_level(N=2, 
+                   baseline=c(.2,.1)),
+  homeowner = add_level(N=c(40000*.7, 40000*.3), 
+                      know=draw_binary(baseline))
+)
+q8_pop <- q8_population()
+q8_pop.vector <- c(40000*.7, 40000*.3)
+q8_estimand <- declare_estimands(mean(know), label = "Ybar")
+q8_reporting <- declare_assignment(blocks=main,
+                  assignment_variable = "R",
+                  block_prob=c(0.2,0.1)) #anticipate only 10% of Gibraltar residents and 20% of everyone else to respond to survey
+q8_sampling <- declare_sampling(strata=main, 
+                             strata_n=c(150,350)) # sampling twice as many 
+
+q8_strata_weighted_mean <- function(data){ 
+  data.frame(
+    estimator_label = "strata_w_mean", 
+    estimand_label = "Ybar",
+    n = nrow(data), 
+    stringsAsFactors = FALSE,
+    estimate = data %>% 
+      filter(R==1) %>%
+      group_by(main) %>%
+      summarise(mean=mean(know)) %>% 
+      mutate(prop=q8_pop.vector/sum(q8_pop.vector)) %>% 
+      mutate(sub.mean=mean*prop) %>% 
+      pull(sub.mean) %>% 
+      sum())
+}
+
+q8_answer <- declare_estimator(
+  handler = tidy_estimator(q8_strata_weighted_mean), 
+  estimand = q8_estimand)
+
+q8_design <- q8_population + q8_estimand + q8_reporting + q8_sampling + q8_answer
+
+q8_diagnosis <- diagnose_design(q8_design, sims = 1000)
+
+q8_diagnosis$diagnosands_df[,c(4,5,12,14)] %>% kable()
+
 
 ```
