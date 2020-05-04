@@ -553,16 +553,16 @@ sd_estimate
 <tbody>
 <tr>
 <td style="text-align:right;">
-0.0112587
+0.0181842
 </td>
 <td style="text-align:right;">
-0.0038207
+0.0026654
 </td>
 <td style="text-align:right;">
-0.305806
+0.3125152
 </td>
 <td style="text-align:right;">
-0.0342448
+0.0305965
 </td>
 </tr>
 </tbody>
@@ -593,7 +593,7 @@ sd_estimate
 <p><strong>Challenges to drawing representative sample</strong>: We believe that may be response bias based on control of landscaping decisions, as renters may not be in control of landscaping. Homeowners are far more likely to control landscaping decisions and therefore are not only more likely to respond to the survey, but also to have an informed answer.</p>
 <p><strong>Sampling procedure</strong>: Stratified sample favoring sampling of homeowners, despite making up less of the overall population (40%) compared with renters</p>
 <pre class="r"><code># Set population of SB based on # of households in SB City, according to US Census data (rounded up to 40,000 for simplicity's sake). Probability is based on data from https://bit.ly/2zSrEdT, which reports a 40% homeownership rate.
-# Probability: estimating that 70% of homeowners control their landscaping decisions, while only 30% of renters control their landscaping decisions.
+# We estimate that responding &quot;yes&quot; to this question is correlated with being a homeowner
 
 set.seed(228)
 population &lt;- declare_population(
@@ -660,7 +660,7 @@ plan_to_plant
 <pre class="r"><code># Generate estimand
 q7_estimand &lt;- declare_estimands(mean(plan_to_plant),
                                  label = &quot;Ybar&quot;)</code></pre>
-<pre class="r"><code># Block probabilities represent how likely it is that a survey respondent actually is in control of their landscaping. If they're not in control of their landscaping, they are not likley to even respond to the survey. 
+<pre class="r"><code># Block probabilities represent how likely it is to get a response, depending on whether the survey recipient is a homeowner or a renter. Given that renters are less likely to be in control of their landscaping, they are less likley to respond to the survey
 rent_or_own &lt;- declare_assignment(blocks=homeowner,
                   assignment_variable = &quot;P&quot;,
                   block_prob=c(0.3,0.7))

@@ -271,7 +271,7 @@ b) No/Don't know
 ```{r}
 
 # Set population of SB based on # of households in SB City, according to US Census data (rounded up to 40,000 for simplicity's sake). Probability is based on data from https://bit.ly/2zSrEdT, which reports a 40% homeownership rate.
-# Probability: estimating that 70% of homeowners control their landscaping decisions, while only 30% of renters control their landscaping decisions.
+# We estimate that responding "yes" to this question is correlated with being a homeowner
 
 set.seed(228)
 population <- declare_population(
@@ -293,7 +293,7 @@ q7_estimand <- declare_estimands(mean(plan_to_plant),
 
 ```{r declare-report}
 
-# Block probabilities represent how likely it is that a survey respondent actually is in control of their landscaping. If they're not in control of their landscaping, they are not likley to even respond to the survey. 
+# Block probabilities represent how likely it is to get a response, depending on whether the survey recipient is a homeowner or a renter. Given that renters are less likely to be in control of their landscaping, they are less likley to respond to the survey
 rent_or_own <- declare_assignment(blocks=homeowner,
                   assignment_variable = "P",
                   block_prob=c(0.3,0.7))
