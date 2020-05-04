@@ -23,7 +23,7 @@ library(kableExtra)
 
 This measurement strategy concerns the Water Wise Landscaping program in the City of Santa Barbara. The following questions were developed to measure the impacts of the program. The program's theory of change encompasses the following activities, outputs, outcomes and goals:
 
-![]("download.png")
+![](download.png)
   
 ## Question 1  
 **Measurement goal** Assess effectiveness of classroom presentation for getting students excited to plant native plants at home  
@@ -94,21 +94,31 @@ d) Don't know
 ***
 ***
 
-## Question 4 JEREMY
-**Measurement goal**  
+## Question 4
+**Measurement goal** Determine whether or not knowledge of the Smart Landscape Rebate program has led to changed decision-mkaing regarding water-smart landscaping
   
-**Exact Measure to be taken**
+**Exact Measure to be taken**: Have you added any of the following to your landscaping in the last year?
 
-**Unit of measure** 
-  
-**Source of data** 
-  
-**Rationale for choice of measure** 
-  
-**Responsibility for data collection** 
-  
-**Frequency of data collection** 
+- Native plants 
+- Water-wise plants 
+- Mulch
+- Permeable surfaces (artificial grass, gravel, flagstone)
 
+Reponses:
+a) Yes, I or someone in my household has added at least one of the above to our landscaping at home within the last year
+b) No/Don't know
+
+**Unit of measure** Survey response
+  
+**Source of data** Survey handout 
+  
+**Rationale for choice of measure** This question, combined with question 4 and other questions related to program familiarity, will help explore whether educational efforts and/or rebates have led SB residents to implement water-saving measures in their yards.
+  
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes). 
+  
+**Frequency of data collection** Once, one year after program implementation
+
+***
 ***
 
 ## Question 5 - 
@@ -129,9 +139,10 @@ Answer: Yes/No
 **Frequency of data collection** Once, one year after program implementation.
 
 ***
+***
 
 ## Question 6   
-**Measurement goal**: assess community knowledge of how native plants can reduce landscape water consumption.  
+**Measurement goal**: Assess community knowledge of how native plants can reduce landscape water consumption.  
   
 **Exact measure to be taken**: In general, how effective are native plants at reducing home landscape water use?  
 a) Very effective  
@@ -228,7 +239,7 @@ q6_diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
 ## Question 7  
 **Measurement goal** Determine whether or not knowledge of the Smart Landscape Rebate program has led to changed decision-mkaing regarding water-smart landscaping
   
-**Exact Measure to be taken**: Have you added, or plan to add, any of the following to your landscaping in the past X period of time?
+**Exact Measure to be taken**: Do you plan to add any of the following to your landscaping in the near future?
 
 - Native plants 
 - Water-wise plants 
@@ -243,7 +254,7 @@ b) No/Don't know
   
 **Source of data** Survey handout 
   
-**Rationale for choice of measure** This question will measure the impact of the presentation on getting students excited to get their family to plant native plants at home.  
+**Rationale for choice of measure** This question, combined with question 4 and other questions related to program familiarity, will help explore whether educational efforts and/or rebates have led SB residents to implement water-saving measures in their yards.
   
 **Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes). 
   
