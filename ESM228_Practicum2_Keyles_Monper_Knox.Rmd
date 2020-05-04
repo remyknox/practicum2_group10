@@ -1,0 +1,321 @@
+---
+title: "Measurement Strategy, ESM 228"
+author: "Gavriella Keyles, Kyle Monper, Jeremy Knox"
+date: "5/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load Packages
+
+library(DeclareDesign)
+library(knitr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(dplyr)
+library(kableExtra)
+```
+
+  
+## Question 1  
+**Measurement goal** Assess effectiveness of classroom presentation for getting students excited to plant native plants at home  
+  
+**Exact Measure to be taken**: How likely are you to plant native plants in your yard at home:
+a) Very likely  
+b) somewhat likely  
+c) somewhat likely  
+d) very likely  
+e) I do not have a yard at home.  
+  
+**unit of measure** individual students who have recieved programing  
+  
+**source of data** survey handout 
+  
+**Rationale for choice of measure** This question will measure the impact of the presentation on getting students excited to get their family to plant native plants at home.  
+  
+**Responsibility for data collection** Survey will be left with teachers by presenters, with a stamp and envelope to return the results.  
+  
+**Frequency of data collection** This will be asked twice, once one day after the presentation, and again one month later. Which is when the next question will also be asked.  
+  
+  
+***  
+***  
+
+## Question 2  
+**Measurement goal** Assess effectiveness of classroom presentation for *actually* getting students to plant native plants at home  
+  
+**Exact Measure to be taken**: Since receiving the classroom presentation have you or your family planted native plants in your yard at home?
+a) Yes  
+b) No  
+c) I did not receive the presentation   
+d) I do not have a yard at home  
+  
+**unit of measure** individual students who have received programing  
+  
+**source of data** survey handout 
+  
+**Rationale for choice of measure** This question combined with the previous question (with paired anonymous survey ID's) will test whether/to what degree students can influence their family to plant native plants at home. The paired structure will allow for matched data to see whether students who were excited one month ago have acted on that excitement and were able to get their family to plant natives.
+  
+**Responsibility for data collection** Survey will be mailed or dropped of to teachers by presenters at randomly selected classroom after presenting. Inlcuded will be a stamp and envelope to return the results.  
+  
+**Frequency of data collection** Once, one month after classroom presentation
+
+
+*** 
+***
+
+## Question 3  
+**Measurement goal** Residential water usage
+  
+**Exact Measure to be taken**: In the last year, has your water utility bill
+a) Increased
+b) Decreased
+c) Remained the same
+d) Don't know
+  
+**unit of measure** Actual residential water usage (cubic feet)
+  
+**source of data** Survey handout, could be supplemented by residential water bills, City of Santa Barbara Water Utility
+  
+**Rationale for choice of measure** While it is not possible to determine causality from water usage data, it is important to observe whether water usage did decline in any measurable way, especially when combined with other survey questions related to awareness of water-smart landscaping or use of the rebate program
+  
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes).
+  
+**Frequency of data collection** Once, one year after program implementation
+
+***
+***
+
+## Question 4  
+**Measurement goal** Assess how familiar Santa Barbara residents are with Smart Landscape Rebate Program
+  
+**Exact Measure to be taken**: How familiar are you with the Smart Landscape Rebate program?
+
+a) Have never hear of it
+b) Not very familiar but have hear of it
+c) Somewhat familiar
+d) Very familiar
+
+**unit of measure** Survey responses
+  
+**source of data** Survey handout
+  
+**Rationale for choice of measure** This question helps deliver a sense of how successful outreach efforts have been to generate awareness of the program in the community
+  
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes).
+  
+**Frequency of data collection** Once, one year after program implementation
+
+***
+
+## Question 5 - Jeremy
+
+***
+
+## Question 6   
+**Measurement goal**: assess community knowledge of how native plants can reduce landscape water consumption.  
+  
+**Exact measure to be taken**: In general, how effective are native plants at reducing home landscape water use?  
+a) Very effective  
+b) somewhat effective  
+c) somewhat ineffective  
+d) very ineffective  
+e) don’t know  
+  
+**Unit of measurement** survey responses  
+  
+**Source of data** mail survey  
+  
+**Rationale for choice of measure** We want to know if residents are aware of the benefits of native plants for conserving water. The best way to discover this is to ask.  
+
+**Responsibility for data collection** The survey will be sent out by a third party survey agency who will also collect and summarise the data    
+  
+**Frequency of data collection** Surveys will be sent out 1 month after informational flyers were placed at distribution locations (i.e community centers, home improvement stores, garden stores, etc). If this drop off only occurs once, a single curvey will be sufficient, however if it continued, surveys should be conducted every 2 months for the duration of the campaign
+
+#### *sampling strategy*  
+
+**target population**: homeowners and home renters within the city of Santa Barbara   
+  
+**challenges to drawing representative sample**: we believe that may be response bias based on 1) knowledge of household knowledge of the benefits of native plants is negatively correlated to the distance that one lives from a central location where information flyers were disseminated, and that 2) people who have seen a flier and learned from it are more likely to respond to our survey question  
+
+**sampling procedure**: stratified sample giving more effort/surveys to household that are farther away from the central location
+
+
+```{r}
+
+### SB has a population of ~40,000 households, and population density decreases with distrance from the distribution location (i.e folks living in more rural/ suburbs like SB hills or carpenteria)
+### knowledge of the benifits of native plants ("knows") is weakly correlated (R = -0.4) to the distance from the central location, and there is a general 20% probability of knowing
+sb_pop <- declare_population(
+  household = add_level(N = 40000,
+                       distance = sample(c(rep(1,11500), rep(2,9500), rep(3, 8250), rep(4, 6250), rep(5,4500))),
+                       knows = correlate(given = distance, 
+                                         rho = -.4, 
+                                         draw_handler = draw_binary,
+                                         prob = .3)))
+                                       
+## different sizes w/in each strata
+pop_vector <- c(11500, 9500, 8250, 62500, 4500)
+
+q6_estimand <- declare_estimands(mean(knows),
+                                 label = "Ybar")
+
+## probability of response is based on whether or not they know about the the benifits of native plants in the first place
+reporting <- declare_assignment(blocks= knows,
+                  assignment_variable = "R",
+                  block_prob= c(.5, .8))
+
+
+# different sampling strata for each distance bin
+try1 <- c(50,70,90,120,150)
+try2 <- c(70,90,120,150,200)
+try3 <- c(30,60,100,130,160)
+try4<- c(100,110,120,140,170)
+try5 <- c(110,120,130,140,150) ## 550 surveys seems like a reasonable/cost-effective number to send
+
+q6_sampling <- declare_sampling(strata=distance,
+                             strata_n=try5)
+
+q6_strata_weighted_mean <- function(data){
+  data.frame(  
+  estimator_label = "strata_w_mean",
+  estimand_label = "Ybar",
+  n = nrow(data),
+  stringsAsFactors = FALSE,
+  
+  estimate = data %>% 
+    filter(R==1) %>% 
+    group_by(distance) %>% 
+    summarise(mean=mean(knows)) %>%
+    mutate(prop=pop_vector/sum(pop_vector)) %>% 
+    mutate(sub.mean=mean*prop) %>% 
+    pull(sub.mean) %>%  
+    sum()) 
+} 
+
+
+q6_answer <- declare_estimator(
+  handler = tidy_estimator(q6_strata_weighted_mean),
+  estimand = q6_estimand)
+
+q6_design <- sb_pop + q6_estimand + reporting + q6_sampling + q6_answer
+q6_diagnosis <- diagnose_design(q6_design, sims = 100)
+
+q6_diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
+  kable()
+```
+
+***
+***
+
+## Question 7  
+**Measurement goal** 
+  
+**Exact Measure to be taken**: Have you added, or plan to add, any of the following to your landscaping in the past X period of time?
+
+- Native plants 
+- Water-wise plants 
+- Mulch
+- Permeable surfaces (artificial grass, gravel, flagstone)
+
+Reponses:
+a) Yes, I or someone in my household plans to add at least one of the above to our landscaping at home
+b) No/Don't know
+
+**unit of measure** Survey response
+  
+**source of data** Survey handout 
+  
+**Rationale for choice of measure** This question will measure the impact of the presentation on getting students excited to get their family to plant native plants at home.  
+  
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 owned homes, 150 rented homes). 
+  
+**Frequency of data collection** Once, one year after program implementation
+
+#### *sampling strategy*  
+
+**target population**: homeowners and home renters within the city of Santa Barbara   
+  
+**challenges to drawing representative sample**: We believe that may be response bias based on control of landscaping decisions, as renters may not be in control of landscaping. Homeowners are far more likely to control landscaping decisions and therefore are not only more likely to respond to the survey, but also to have an informed answer.
+
+**sampling procedure**: stratified sample favoring sampling of homeowners, despite making up less of the overall population (40%) compared with renters
+
+```{r}
+
+# Set population of SB based on # of households in SB City, according to US Census data (rounded up to 40,000 for simplicity's sake). Probability is based on data from https://bit.ly/2zSrEdT, which reports a 40% homeownership rate.
+# Probability: estimating that 70% of homeowners control their landscaping decisions, while only 30% of renters control their landscaping decisions.
+
+set.seed(228)
+population <- declare_population(
+  households = add_level(N=40000, 
+     homeowner=draw_binary(N=N, prob = 0.4),
+     plan_to_plant=correlate(given = homeowner, rho = 0.5,
+                         draw_binary, prob = 0.5)
+))
+
+q7_pop <- population()
+
+kable(table(q7_pop$homeowner,q7_pop$plan_to_plant)) %>% 
+  add_header_above(c("homeowner"=1,"plan_to_plant"=2))
+
+# Generate estimand
+q7_estimand <- declare_estimands(mean(plan_to_plant),
+                                 label = "Ybar")
+```
+
+## DeclareDesign()
+
+```{r declare-report}
+
+# Block probabilities represent how likely it is that a survey respondent actually is in control of their landscaping. If they're not in control of their landscaping, they are not likley to even respond to the survey. 
+rent_or_own <- declare_assignment(blocks=homeowner,
+                  assignment_variable = "P",
+                  block_prob=c(0.3,0.7))
+
+# We want to get a good idea of whether our program influenced people to make changes in the garden, so we want to hear more from people who are more likely to have control over their own gardens. We oversample homeowners to bias the average response towards people who are more likely to be in control of their landscaping, and therefore more likely to respond or make water-wise changes in the garden. 
+q7_sampling <- declare_sampling(strata=homeowner,
+                             strata_n=c(150,350))
+```
+
+## DeclareDesign()
+
+```{r declare-estimator}
+
+q7_strata_weighted_mean <- function(data){
+  data.frame(  
+  estimator_label = "strata_w_mean",
+  estimand_label = "Ybar",
+  n = nrow(data),
+  stringsAsFactors = FALSE,
+  
+  estimate = data %>% filter(P==1) %>%
+    group_by(homeowner) %>% 
+    summarise(mean=mean(plan_to_plant)) %>%
+    mutate(prop=c(0.3,0.7)) %>%
+    mutate(sub.mean=mean*prop) %>% pull(sub.mean) %>% 
+    sum())
+}
+
+```
+
+## DeclareDesign()
+
+```{r diagnosis, cache=TRUE}
+
+q7_answer <- declare_estimator(
+  handler = tidy_estimator(q7_strata_weighted_mean),
+  estimand = q7_estimand)
+
+q7_design <- population + q7_estimand + rent_or_own +
+          q7_sampling + q7_answer
+
+q7_diagnosis <- diagnose_design(q7_design, sims = 1000)
+
+q7_diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
+  kable()
+
+```
