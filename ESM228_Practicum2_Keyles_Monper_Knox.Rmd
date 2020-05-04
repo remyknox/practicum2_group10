@@ -319,37 +319,35 @@ q7_diagnosis$diagnosands_df[,c(4,5,12,14)] %>%
 ***
 
 ## Question 8
-**Measurement goal** 
-  
-**Exact Measure to be taken**: 
+**Measurement goal** Determine whether or not knowledge of the Smart Landscape Rebate program has led to changed decision-mkaing regarding water-smart landscaping
 
-**Unit of measure** 
+**Exact Measure to be taken**: Identifying residents knowledge of the Smart Landscape Rebate program?
+
+Question: Do you know about the Smart Landscape Rebate program?
+
+Answer: Yes/No or 1/0
+
+**Unit of measure** Survey response
   
-**Source of data**
+**Source of data** Mail 
   
-**Rationale for choice of measure** 
+**Rationale for choice of measure** This question will measure the impact of marketing the Smart Landscape Rebate program to SB residents. 
   
-**Responsibility for data collection** 
+**Responsibility for data collection** Survey will be mailed or hung on doorknobs to a random sample of Santa Barbara households (350 Gibraltar residents, 150 "main" residents). 
   
-**Frequency of data collection** 
+**Frequency of data collection** Once, one year after program implementation.
+
 
 #### ***Sampling strategy***  
 
-**Target population**: 
+**Target population**: Main residents and Gibraltar residents within the city of Santa Barbara   
   
-**Challenges to drawing representative sample**: 
+**Challenges to drawing representative sample**: Main road bias by spatial location. Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 250 residents. 
 
-**Sampling procedure**: 
+**Sampling procedure**: Stratified sample favoring sampling of Gibraltar residents, despite making up less of the overall population (30%) compared with renters
 
 
 ```{r Jeremy}
-# Question: Do you know about the Smart Landscape Rebate program?
-# Answer: Yes/No or 1/0
-# Sampling Strategy 
-# Target population: homeowners and home renters within the city of Santa Barbara 
-# Representitive Sample Challenges: Main road bias by spatial location 
-# Example: Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 250 residents. 
-
 # Load Packages
 library(DeclareDesign)
 library(knitr)
