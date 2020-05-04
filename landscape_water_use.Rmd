@@ -55,7 +55,57 @@ For three of your eight measures, formally declare your sampling strategy in cod
     5. Description of sampling procedure (in words)
     6. Declaration of sampling procedure (in code)
 
-    
+```{r Jeremy}
+# Question: Do you know about the Smart Landscape Rebate program?
+# Answer: Yes/No or 1/0
+# Sampling Strategy 
+# Target population: homeowners and home renters within the city of Santa Barbara 
+# Representitive Sample Challenges: Main road bias by spatial location 
+# Example: Gibraltar Rd residents are 1/2 as likely to respond to surveys so we will sample them 2x as much to get a representative sample of SB city residents. That means Gibrlatar residents will respond to 10% of the surveys handed out and SB "main" residents will respond to 20% of surveys. Gibrlatar resdents only account for 30% of the population. The population is around 40,000. We intened to sample 250 residents. 
+
+# Load Packages
+library(DeclareDesign)
+library(knitr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(dplyr)
+library(kableExtra)
+
+# Declaration of hypothetical population and reporting probabilities
+set.seed(777)
+sb_pop <- DeclareDesign::declare_population(
+    households = add_level(N=40000, 
+                           main=sample(c(rep(0,40000*.4),rep(1,40000*.6))), 
+                           satisfied=correlate(given = main, 
+                                               rho = 0.4,
+                                               draw_binary, 
+                                               prob = 0.3)
+))
+pop <- population()
+reporting <- declare_assignment(blocks=main,
+                  assignment_variable = "R",
+                  block_prob=c(0.2,0.1)) #anticipate only 10% of Gibraltar residents and 20% of everyone else to respond to survey
+pop <- reporting(pop)
+
+# Declaration of sampling procedure
+sims <- 1000 #simulations
+sam.n <- 250 #attempted sample size store <- rep(NA, sims)
+
+for (i in 1:sims){
+  index <- sample(1:500,sam.n) #drawn sample 
+  pop <- reporting(pop)
+  main <- mean(pop[index,] %>%
+                 filter(R==1 & main==1) %>%
+                 pull(satisfied)) 
+  side <- mean(pop[index,] %>%
+                 filter(R==1 & main==0) %>%
+                 pull(satisfied)) 
+  store[i] <- main * 0.5 + side * 0.5
+}
+
+```
+
 ```{r}
 
 # Load Packages
