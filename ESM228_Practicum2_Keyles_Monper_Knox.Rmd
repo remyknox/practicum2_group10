@@ -21,7 +21,9 @@ library(dplyr)
 library(kableExtra)
 ```
 
-This measurement strategy concerns the Smart 
+This measurement strategy concerns the Water Wise Landscaping program in the City of Santa Barbara. The following questions were developed to measure the impacts of the program. The program's theory of change encompasses the following activities, outputs, outcomes and goals:
+
+![]("download.png")
   
 ## Question 1  
 **Measurement goal** Assess effectiveness of classroom presentation for getting students excited to plant native plants at home  
